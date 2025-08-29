@@ -1,0 +1,7 @@
+frontend/node_modules
+backend/chat/node_modules
+backend/mail/node_modules
+backend/user/node_modules
+backend/chat/dist
+backend/mail/dist
+backend/user/dist
