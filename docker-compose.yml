@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   rabbitmq-service:
-    hostname: rabbitmq-host
+    hostname: rabbitmq-service
     image: rabbitmq:3-management
     container_name: rabbitmq-container
     ports:
@@ -11,6 +11,11 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin123
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
   backend-user:
     build:
@@ -21,7 +26,8 @@ services:
     env_file:
       - ./backend/user/.env.production
     depends_on:
-      - rabbitmq-service
+      rabbitmq-service:
+        condition: service_healthy
     restart: unless-stopped
 
   backend-chat:
@@ -45,7 +51,8 @@ services:
     env_file:
       - ./backend/mail/.env.production
     depends_on:
-      - rabbitmq-service
+      rabbitmq-service:
+        condition: service_healthy
     restart: unless-stopped
 
   frontend:
