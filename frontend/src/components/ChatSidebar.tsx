@@ -81,7 +81,7 @@ const ChatSidebar = ({
               <Plus className="w-4 h-4" />
             )}
           </button>
-        </div>
+        </div>  
       </div>
       <div className="flex-1 overflow-hidden px-4 py-2">
         {showAllUsers ? (
@@ -132,7 +132,7 @@ const ChatSidebar = ({
             {chats.map((chat) => {
               const latestMessage = chat.chat.latestMessage;
               const isSelected = selectedUser === chat.chat._id;
-              const isSentByMe = latestMessage?.sender === loggedInUser?._id;
+              const isSentByMe = latestMessage?.senderId === loggedInUser?._id;
               const unseenCount = chat.chat.unseenCount || 0;
 
               return (

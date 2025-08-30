@@ -22,7 +22,7 @@ export default function LoginPage() {
       const { data } = await axios.post(`${user_service}/api/v1/login`, {
         email,
       });
-      // toast.success(data.message);
+      toast.success(data.message);
       router.push(`/verify?email=${email}`);
     } catch (error) {
       toast.error(error as string);

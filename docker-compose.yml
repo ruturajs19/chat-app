@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  rabbitmq-service:
+    hostname: rabbitmq-host
+    image: rabbitmq:3-management
+    container_name: rabbitmq-container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+
+  backend-user:
+    build:
+      context: ./backend/user
+    container_name: backend-user
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/user/.env.production
+    depends_on:
+      - rabbitmq-service
+    restart: unless-stopped
+
+  backend-chat:
+    build:
+      context: ./backend/chat
+    container_name: backend-chat
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./backend/chat/.env.production
+    depends_on:
+      - backend-user
+    restart: unless-stopped
+
+  backend-mail:
+    build:
+      context: ./backend/mail
+    container_name: backend-mail
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./backend/mail/.env.production
+    depends_on:
+      - rabbitmq-service
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend-user
+      - backend-chat
+    restart: unless-stopped

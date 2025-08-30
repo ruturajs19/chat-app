@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { ArrowRight, ChevronLeft, Loader2, Lock, Mail } from "lucide-react";
+import { ArrowRight, ChevronLeft, Loader2, Lock } from "lucide-react";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";

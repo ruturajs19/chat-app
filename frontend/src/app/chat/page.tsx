@@ -4,7 +4,7 @@ import ChatSidebar from "@/components/ChatSidebar";
 import Loading from "@/components/Loading";
 import { chat_service, Chats, useAppData, User } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -60,8 +60,45 @@ export default function ChatApp() {
 
   const handleLogout = () => logoutUser();
 
+  const moveChatToTop = (
+    chatId: string,
+    newMessage: Message,
+    updatedUnseenCount = true
+  ) => {
+    setChats((prev) => {
+      if (!prev) return null;
+
+      const updatedChats = [...prev];
+      const chatIndex = updatedChats.findIndex(
+        (chat) => chat.chat._id === chatId
+      );
+
+      if (chatIndex !== -1) {
+        const [moveChat] = updatedChats.splice(chatIndex, 1);
+
+        const updatedChat: Chats = {
+          ...moveChat,
+          chat: {
+            ...moveChat.chat,
+            latestMessage: {
+              text: newMessage.text as string,
+              senderId: newMessage.sender,
+            },
+            updatedAt: new Date().toString(),
+            unseenCount:
+              updatedUnseenCount && newMessage.sender !== loggedInUser?._id
+                ? (moveChat.chat.unseenCount || 0) + 1
+                : moveChat.chat.unseenCount || 0,
+          },
+        };
+        updatedChats.unshift(updatedChat);
+      }
+      return updatedChats;
+    });
+  };
+
   useEffect(() => {
-    socket?.on("newMessage", (message) => {
+    socket?.on("newMessage", (message: Message) => {
       console.log("Received new message:", message);
       if (selectedUser === message.chatId) {
         setMessages((prev) => {
@@ -77,33 +114,37 @@ export default function ChatApp() {
         });
 
         moveChatToTop(message.chatId, message, false);
-      }else{
-        moveChatToTop(message.chatId, message, true)
+      } else {
+        moveChatToTop(message.chatId, message, true);
       }
     });
-    socket?.on('messagesSeen',(data)=>{
-      if(selectedUser === data.chatId){
-        setMessages((prev)=>{
-          if(!prev) return null;
-          return prev.map((msg)=>{
-            if(msg.sender === loggedInUser?._id && data.messageIds && data.messageIds.includes(msg._id)){
+    socket?.on("messagesSeen", (data) => {
+      if (selectedUser === data.chatId) {
+        setMessages((prev) => {
+          if (!prev) return null;
+          return prev.map((msg) => {
+            if (
+              msg.sender === loggedInUser?._id &&
+              data.messageIds &&
+              data.messageIds.includes(msg._id)
+            ) {
               return {
                 ...msg,
                 seen: true,
-                seenAt: new Date().toString()
-              }
-            }else if(msg.sender === loggedInUser?._id && !data.messageIds){
+                seenAt: new Date().toString(),
+              };
+            } else if (msg.sender === loggedInUser?._id && !data.messageIds) {
               return {
                 ...msg,
                 seen: true,
-                seenAt: new Date().toString()
-              }
+                seenAt: new Date().toString(),
+              };
             }
-            return msg
-          })
-        })
+            return msg;
+          });
+        });
       }
-    })
+    });
     socket?.on("userTyping", (data) => {
       console.log("received user typing", data);
 
@@ -121,7 +162,7 @@ export default function ChatApp() {
 
     return () => {
       socket?.off("newMessage");
-      socket?.off('messagesSeen');
+      socket?.off("messagesSeen");
       socket?.off("userTyping");
       socket?.off("userStoppedTyping");
     };
@@ -187,43 +228,6 @@ export default function ChatApp() {
 
   if (loading) return <Loading />;
 
-  const moveChatToTop = (
-    chatId: string,
-    newMessage: any,
-    updatedUnseenCount = true
-  ) => {
-    setChats((prev) => {
-      if (!prev) return null;
-
-      const updatedChats = [...prev];
-      const chatIndex = updatedChats.findIndex(
-        (chat) => chat.chat._id === chatId
-      );
-
-      if (chatIndex !== -1) {
-        const [moveChat] = updatedChats.splice(chatIndex, 1);
-
-        const updatedChat = {
-          ...moveChat,
-          chat: {
-            ...moveChat.chat,
-            latestMessage: {
-              text: newMessage.text,
-              sender: newMessage.sender,
-            },
-            updatedAt: new Date().toString(),
-            unseenCount:
-              updatedUnseenCount && newMessage.sender !== loggedInUser?._id
-                ? (moveChat.chat.unseenCount || 0) + 1
-                : moveChat.chat.unseenCount || 0,
-          },
-        };
-        updatedChats.unshift(updatedChat);
-      }
-      return updatedChats;
-    });
-  };
-
   async function createChat(u: User) {
     try {
       const token = Cookies.get("token");
@@ -248,7 +252,10 @@ export default function ChatApp() {
     }
   }
 
-  const handleMessageSend = async (e: any, imageFile?: File | null) => {
+  const handleMessageSend = async (
+    e: FormEvent<HTMLFormElement>,
+    imageFile?: File | null
+  ) => {
     e.preventDefault();
     if ((!message.trim() && !imageFile) || !selectedUser) return;
 
@@ -288,12 +295,21 @@ export default function ChatApp() {
       });
       setMessage("");
       const displayText = imageFile ? "📷 image" : message;
-      moveChatToTop(selectedUser!,{
-        text: displayText,
-        sender: data.sender
-      }, false)
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to send message");
+      moveChatToTop(
+        selectedUser!,
+        {
+          ...data.message,
+          text: displayText,
+          sender: data.sender,
+        },
+        false
+      );
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to send message");
+      }
     }
   };
 

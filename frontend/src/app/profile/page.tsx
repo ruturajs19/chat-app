@@ -2,7 +2,7 @@
 
 import { useAppData, user_service } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -20,7 +20,7 @@ const ProfilePage = () => {
     setName(user?.name);
   };
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = Cookies.get("token");
     try {
@@ -41,7 +41,7 @@ const ProfilePage = () => {
       toast.success(data.message);
       setUser(data.user);
       setIsEdit(false);
-    } catch (error) {
+    } catch {
       toast.error("Failed to update profile");
     }
   };
