@@ -55,7 +55,7 @@ const ChatMessages = ({
                   <div
                     className={`rounded-lg p-3 max-w-sm ${
                       isSentByMe
-                        ? "bg-blue-600 text-white"
+                        ? "bg-blue-900 text-white"
                         : "bg-gray-700 text-white"
                     }`}
                   >

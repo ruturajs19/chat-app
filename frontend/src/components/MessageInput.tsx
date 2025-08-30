@@ -1,4 +1,4 @@
-import { Loader2, Paperclip, Send, X } from "lucide-react";
+import { Loader2, Paperclip, SendHorizonal, X } from "lucide-react";
 import Image from "next/image";
 import { FormEvent, FormEventHandler, useState } from "react";
 
@@ -57,8 +57,8 @@ const MessageInput = ({
         </div>
       )}
       <div className="flex items-center gap-2">
-        <label className="cursor-pointer bg-gray-700 hover:bg-gray-600 rounded-lg px-3 py-2 transition-colors">
-          <Paperclip size={18} className="text-gray-300" />
+        <label className="cursor-pointer bg-gray-700 hover:bg-gray-600 rounded-lg px-3 py-3 transition-colors">
+          <Paperclip size={16} className="text-gray-300" />
           <input
             type="file"
             accept="image/*"
@@ -79,13 +79,13 @@ const MessageInput = ({
         />
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-white"
+          className="bg-blue-900 hover:bg-blue-700 px-4 py-3 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-white"
           disabled={(!imageFile && !message) || isUploading}
         >
           {isUploading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
-            <Send className="w-4 h-4" />
+            <SendHorizonal className="w-4 h-4" />
           )}
         </button>
       </div>

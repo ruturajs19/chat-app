@@ -146,15 +146,11 @@ export default function ChatApp() {
       }
     });
     socket?.on("userTyping", (data) => {
-      console.log("received user typing", data);
-
       if (data.chatId === selectedUser && data.userId !== loggedInUser?._id) {
         setisTyping(true);
       }
     });
     socket?.on("userStoppedTyping", (data) => {
-      console.log("received user stopped typing", data);
-
       if (data.chatId === selectedUser && data.userId !== loggedInUser?._id) {
         setisTyping(false);
       }
@@ -343,7 +339,7 @@ export default function ChatApp() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-900 text-white relative overflow-hidden">
+    <div className="min-h-screen flex text-white relative overflow-hidden bg-black">
       <ChatSidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSiderbarOpen}

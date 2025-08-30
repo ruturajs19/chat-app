@@ -45,7 +45,7 @@ const ChatSidebar = ({
   const [searchQuery, setSearchQuery] = useState("");
   return (
     <aside
-      className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-gray-900 border-r border-gray-700 transform ${
+      className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-gray-950 border-r border-gray-700 transform ${
         sidebarOpen ? "translate-x-0" : "translate-x-full"
       } sm:translate-x-0 transition-transform duration-300 flex flex-col`}
     >
@@ -60,11 +60,8 @@ const ChatSidebar = ({
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 justify-between">
-              <MessageCircle className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="textxl font-bold text-white">
-              {showAllUsers ? "New Chat" : "Messages"}
+            <h2 className="text-xl font-bold text-white">
+              {showAllUsers ? "Start New Chat" : "Conversations"}
             </h2>
           </div>
           <button
@@ -144,7 +141,7 @@ const ChatSidebar = ({
                   }}
                   className={`w-full text-left p-4 rounded-lg transition-colors ${
                     isSelected
-                      ? "bg-blue-600 border border-blue-500"
+                      ? "bg-blue-900 border border-blue-900"
                       : "border border-gray-700 hover:border-gray-600"
                   }`}
                 >
