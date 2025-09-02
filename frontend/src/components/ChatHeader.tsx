@@ -25,7 +25,7 @@ const ChatHeader = ({
           <Menu className="w-5 h-5 text-gray-200" />
         </button>
       </div>
-      <div className="mb-6 border-b-gray-700">
+      <div className="mb-6 border-b-gray-900">
         <div className="flex items-center gap-4">
           {user ? (
             <>
