@@ -20,7 +20,7 @@ const Header = ({
 }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   return (
-    <div className="fixed top-0 left-0 w-full h-15 z-50 bg-gray-950 border-b border-gray-900 flex items-center gap-2 justify-between pl-4">
+    <div className="fixed top-0 left-0 w-full h-15 z-50 bg-gray-950 border-b border-gray-900 flex items-center justify-between pl-4">
       <h2 className="text-2xl font-bold text-white">Chat App</h2>
       <div className="max-w-100 relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -73,24 +73,24 @@ const Header = ({
           </div>
         )}
       </div>
-      <div className="p-4 border-t border-gray-700 flex">
+      <div className="flex">
         <Link
+          title="Profile"
           href={"/profile"}
-          className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition-colors border-r-1 border-gray-700"
         >
           <div className="p-1.5 bg-gray-700 rounded-lg">
             <UserCircle className="w-4 h-4 text-gray-300" />
           </div>
-          <span className="font-medium text-gray-300">Profile</span>
         </Link>
         <button
+          title="logout"
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors text-red-500 hover:text-white"
+          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-600 transition-colors text-red-500 hover:text-white cursor-pointer"
         >
-          <div className="p-1.5 bg-red-600 rounded-lg">
+          <div className="p-1.5 bg-red-600">
             <LogOut className="w-4 h-4 text-gray-300" />
           </div>
-          <span className="font-medium">Logout</span>
         </button>
       </div>
     </div>
