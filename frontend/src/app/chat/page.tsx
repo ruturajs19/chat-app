@@ -12,6 +12,7 @@ import ChatHeader from "@/components/ChatHeader";
 import ChatMessages from "@/components/ChatMessages";
 import MessageInput from "@/components/MessageInput";
 import { SocketData } from "@/context/SocketContext";
+import Header from "@/components/Header";
 
 export interface Message {
   _id: string;
@@ -243,7 +244,7 @@ export default function ChatApp() {
       setSelectedUser(data.chatId);
       setShowAllUsers(false);
       await fetchChats();
-    } catch (error) {
+    } catch {
       toast.error("Failed to start chat");
     }
   }
@@ -339,41 +340,50 @@ export default function ChatApp() {
   };
 
   return (
-    <div className="min-h-screen flex text-white relative overflow-hidden bg-black">
-      <ChatSidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSiderbarOpen}
-        showAllUsers={showAllUsers}
-        setShowAllUsers={setShowAllUsers}
-        selectedUser={selectedUser}
-        setSelectedUser={setSelectedUser}
+    <>
+      <Header
         users={users}
-        chats={chats}
         loggedInUser={loggedInUser}
         handleLogout={handleLogout}
         createChat={createChat}
         onlineUsers={onlineUsers}
       />
-      <div className="flex-1 flex flex-col justify-between p-4 backdrop-blur-xl bg-white/5 border-1 border-white/10">
-        <ChatHeader
-          user={user}
+      <div className="min-h-[calc(100vh-60px)] flex text-white relative overflow-hidden bg-black top-15">
+        <ChatSidebar
+          sidebarOpen={sidebarOpen}
           setSidebarOpen={setSiderbarOpen}
-          isTyping={isTyping}
+          showAllUsers={showAllUsers}
+          setShowAllUsers={setShowAllUsers}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          users={users}
+          chats={chats}
+          loggedInUser={loggedInUser}
+          handleLogout={handleLogout}
+          createChat={createChat}
           onlineUsers={onlineUsers}
         />
-        <ChatMessages
-          selectedUser={selectedUser}
-          loggedInUser={loggedInUser}
-          messages={messages}
-        />
+        <div className="flex-1 flex flex-col justify-between p-4 backdrop-blur-xl bg-white/5 border-1 border-gray-900">
+          <ChatHeader
+            user={user}
+            setSidebarOpen={setSiderbarOpen}
+            isTyping={isTyping}
+            onlineUsers={onlineUsers}
+          />
+          <ChatMessages
+            selectedUser={selectedUser}
+            loggedInUser={loggedInUser}
+            messages={messages}
+          />
 
-        <MessageInput
-          selectedUser={selectedUser}
-          message={message}
-          setMessage={handleTyping}
-          handleMessageSend={handleMessageSend}
-        />
+          <MessageInput
+            selectedUser={selectedUser}
+            message={message}
+            setMessage={handleTyping}
+            handleMessageSend={handleMessageSend}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
