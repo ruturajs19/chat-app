@@ -20,7 +20,7 @@ const Header = ({
 }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   return (
-    <div className="fixed top-0 left-0 w-full h-15 z-50 bg-gray-950 border-b border-gray-900 flex items-center justify-between pl-4">
+    <header className="fixed top-0 left-0 w-full h-15 z-50 bg-gray-950 border-b border-gray-900 flex items-center justify-between pl-4">
       <h2 className="text-2xl font-bold text-white">Chat App</h2>
       <div className="max-w-100 relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -49,7 +49,7 @@ const Header = ({
                 .map((u) => (
                   <button
                     key={u._id}
-                    className="w-full text-left border-b border-gray-600 hover:bg-gray-700 transition-colors py-2 px-2"
+                    className="cursor-pointer w-full text-left border-b border-gray-600 hover:bg-gray-700 transition-colors py-2 px-2"
                     onClick={() => {
                       createChat(u);
                       setSearchQuery("");
@@ -93,7 +93,7 @@ const Header = ({
           </div>
         </button>
       </div>
-    </div>
+    </header>
   );
 };
 

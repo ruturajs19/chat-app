@@ -348,7 +348,7 @@ export default function ChatApp() {
         createChat={createChat}
         onlineUsers={onlineUsers}
       />
-      <div className="min-h-[calc(100vh-60px)] flex text-white relative overflow-hidden bg-black top-15">
+      <div className="h-[calc(100vh-60px)] flex text-white relative overflow-hidden bg-black top-15">
         <ChatSidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSiderbarOpen}
